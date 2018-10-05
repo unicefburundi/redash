@@ -3,7 +3,7 @@ import logging
 import urlparse
 import urllib
 
-import redis 
+import redis
 from flask import Flask, current_app
 from flask_sslify import SSLify
 from werkzeug.contrib.fixers import ProxyFix
@@ -96,7 +96,7 @@ def create_app(load_admin=True):
     from redash.handlers.webpack import configure_webpack
     from redash.handlers import chrome_logger
     from redash.models import db, users
-    from redash.metrics.request import provision_app
+    from redash.metrics import request as request_metrics
 
     app = Flask(__name__,
                 template_folder=settings.STATIC_ASSETS_PATH,
@@ -127,7 +127,7 @@ def create_app(load_admin=True):
     app.config['SQLALCHEMY_DATABASE_URI'] = settings.SQLALCHEMY_DATABASE_URI
     app.config.update(settings.all_settings())
 
-    provision_app(app)
+    request_metrics.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     if load_admin:
@@ -137,7 +137,7 @@ def create_app(load_admin=True):
     limiter.init_app(app)
     handlers.init_app(app)
     configure_webpack(app)
-    extensions.init_extensions(app)
+    extensions.init_app(app)
     chrome_logger.init_app(app)
     users.init_app(app)
 
