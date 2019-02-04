@@ -84,6 +84,7 @@ function DashboardWidgetCtrl($location, $uibModal, $window, $rootScope, Events, 
       widget: this.widget,
     }).result.then(() => {
       this.localParameters = null;
+      this.refresh();
       $rootScope.$broadcast('dashboard.update-parameters');
     });
   };
