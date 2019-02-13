@@ -14,6 +14,7 @@ describe('Percy Page Screenshots', () => {
     it(`takes a screenshot of ${page.name}`, () => {
       cy.login();
       cy.visit(page.url);
+      cy.clock(Date.now() + (60 * 60 * 1000));
       cy.wait(1000);
       cy.percySnapshot(page.name);
     });
